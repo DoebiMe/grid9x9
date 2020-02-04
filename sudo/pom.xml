@@ -250,12 +250,13 @@
                             <trimStackTrace>false</trimStackTrace>
                             <enableAssertions>true</enableAssertions>
                             <systemPropertyVariables>
-                                !-- Pass location of downloaded webdrivers to the tests --
+                                 Pass location of downloaded webdrivers to the tests
                                 <webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>
                     -->
+                    <!--
                     <plugin>
                         <groupId>com.lazerycode.selenium</groupId>
                         <artifactId>driver-binary-downloader-maven-plugin</artifactId>
@@ -275,7 +276,7 @@
                         </configuration>
                         <executions>
                             <execution>
-                                <!-- use phase "none" to skip download step -->
+                                 use phase "none" to skip download step
                                 <phase>${drivers.downloader.phase}</phase>
                                 <goals>
                                     <goal>selenium</goal>
@@ -283,6 +284,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>

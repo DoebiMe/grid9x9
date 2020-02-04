@@ -1,6 +1,8 @@
 package be.doubbel.sudo.gui;
 
+import be.doubbel.sudo.service.FileService;
 import be.doubbel.sudo.service.GreetService;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -40,7 +42,16 @@ public class MainView extends VerticalLayout {
     public MainView(@Autowired GreetService service) {
         addClassName("mainForm");
         Gird9x9 grid = new Gird9x9();
-        add(grid);
+        add(grid,createLoadButton());
+    }
+
+    public Button createLoadButton() {
+        FileService fileService = new FileService();
+        Button result = new Button("Load Sudo");
+        result.addClickListener(buttonClickEvent -> {
+            fileService.readSudo("s01a.txt");
+        });
+        return result;
     }
 
 }
