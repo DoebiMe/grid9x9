@@ -47,11 +47,12 @@ public class MainView extends VerticalLayout {
 
     public Button createLoadButton() {
         FileService fileService = new FileService();
-        Button result = new Button("Load Sudo");
-        result.addClickListener(buttonClickEvent -> {
+        Button loadSudoButton = new Button("Load Sudo");
+        loadSudoButton.addClickListener(buttonClickEvent -> {
             fileService.readSudo("s01a.txt");
         });
-        return result;
+        loadSudoButton.setHeight("5px");
+        return loadSudoButton;
     }
 
 }
