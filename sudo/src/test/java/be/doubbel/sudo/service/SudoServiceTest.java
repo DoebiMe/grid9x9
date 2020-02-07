@@ -1,5 +1,6 @@
 package be.doubbel.sudo.service;
 
+import be.doubbel.sudo.common.RowCol;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class SudoServiceTest {
 
     @Test
     public void setCellCandidateValues() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 
 				// we do not us '0', the sudo values start from '1'
         List<Integer> list1 = new ArrayList<>(List.of(1,2,3,7,9));
@@ -36,7 +37,7 @@ public class SudoServiceTest {
 
 		@Test public
 		void getCellValue() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 
 				SudoService.setCellValueAffectCandidates(0,0,5);
 				assertNotEquals(8, (int) SudoService.getCellValue(0, 0));
@@ -56,7 +57,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void setCellValueAffectCandidates() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 
 				List<Integer> candidateList1 = new ArrayList<>(List.of(1,2,3));
     		SudoService.replaceCellCandidateValues(0,0,candidateList1);
@@ -75,7 +76,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void getRowValues() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 
 				Integer[] values = {1,2,0,0,5,6,0,0,9};
 
@@ -93,7 +94,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void getColValues() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				Integer[] values = {1,2,0,0,5,6,0,0,9};
 
 				SudoService.setCellValueAffectCandidates(0,7,1);
@@ -110,7 +111,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void getSquareValues() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				Integer[] values = {1,2,0,0,5,6,0,0,9};
 
 				SudoService.setCellValueAffectCandidates(6,3,1);
@@ -127,7 +128,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void getCellCandidatesValue() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(0,(int)SudoService.getCellCandidatesValue(0,0));
 				SudoService.replaceCellCandidateValues(8,8,List.of(2,3));
 				assertEquals(12,(int)SudoService.getCellCandidatesValue(8,8));
@@ -136,7 +137,7 @@ public class SudoServiceTest {
 		}
 
 		@Test public void getCellCandidatesValues() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(0,(int)SudoService.getCellCandidatesValue(0,0));
 				SudoService.replaceCellCandidateValues(8,8,List.of(2,3));
 				assertEquals(List.of(2,3),SudoService.getCellCandidatesValues(8,8));
@@ -145,12 +146,17 @@ public class SudoServiceTest {
 		}
 
 		@Test public void countCandidateIn3x3() {
-				SudoService.initializeSudo();
-
+				SudoService.initialize9x9();
+				assertEquals(0,(int) SudoService.countCandidateIn3x3(0,0,1));
+				SudoService.replaceCellCandidateValues(0,0,List.of(1));
+				assertEquals(1,(int) SudoService.countCandidateIn3x3(0,0,1));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countCandidateIn3x3(0,0,1,resultList);
+				assertTrue(resultList.get(0).equals(new RowCol(0,0)));
 		}
 
 		@Test public void countCandidateIn9x9() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(0,(int)SudoService.countCandidateIn9x9(5));
 				SudoService.replaceCellCandidateValues(4,4,List.of(5));
 				assertEquals(1,(int)SudoService.countCandidateIn9x9(5));
@@ -158,10 +164,16 @@ public class SudoServiceTest {
 				assertEquals(2,(int)SudoService.countCandidateIn9x9(5));
 				SudoService.replaceCellCandidateValues(0,0,List.of(5));
 				assertEquals(3,(int)SudoService.countCandidateIn9x9(5));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countCandidateIn9x9(5,resultList);
+				System.out.println("Contains " +resultList.size());
+				assertEquals(3, resultList.size());
+				assertTrue(resultList.contains(new RowCol(8,8)));
+				assertFalse(resultList.contains(new RowCol(7,7)));
 		}
 
 		@Test public void countCandidateInRow() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(0,(int)SudoService.countCandidateInRow(0,5));
 				SudoService.replaceCellCandidateValues(8,4,List.of(5));
 				assertEquals(1,(int)SudoService.countCandidateInRow(8,5));
@@ -169,10 +181,14 @@ public class SudoServiceTest {
 				assertEquals(2,(int)SudoService.countCandidateInRow(8,5));
 				SudoService.replaceCellCandidateValues(8,0,List.of(5,6));
 				assertEquals(3,(int)SudoService.countCandidateInRow(8,5));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countCandidateInRow(8,5,resultList);
+				assertEquals(3, resultList.size());
+				assertTrue(resultList.contains(new RowCol(8,4)));
 		}
 
 		@Test public void countCandidateInCol() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(0,(int)SudoService.countCandidateInCol(0,5));
 				SudoService.replaceCellCandidateValues(2,8,List.of(5));
 				assertEquals(1,(int)SudoService.countCandidateInCol(8,5));
@@ -180,15 +196,25 @@ public class SudoServiceTest {
 				assertEquals(2,(int)SudoService.countCandidateInCol(8,5));
 				SudoService.replaceCellCandidateValues(7,8,List.of(5,6));
 				assertEquals(3,(int)SudoService.countCandidateInCol(8,5));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countCandidateInCol(8,5,resultList);
+				assertEquals(3, resultList.size());
+				assertTrue(resultList.contains(new RowCol(5,8)));
 		}
 
 		@Test public void countEmptyCellsIn3x3() {
-				SudoService.initializeSudo();
-
+				SudoService.initialize9x9();
+				assertEquals((int)SudoService.countEmptyCellsIn3x3(1, 0), 9);
+				SudoService.setCellValueAffectCandidates(4,0,5);
+				assertEquals((int)SudoService.countEmptyCellsIn3x3(1, 0), 8);
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countEmptyCellsIn3x3(1,0,resultList);
+				assertFalse(resultList.contains(new RowCol(4,0)));
+				assertTrue(resultList.contains(new RowCol(4,1)));
 		}
 
 		@Test public void countEmptyCellsIn9x9() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(81,(int)SudoService.countEmptyCellsIn9x9());
 				SudoService.setCellValueAffectCandidates(8,0,1);
 				assertEquals(80,(int)SudoService.countEmptyCellsIn9x9());
@@ -201,10 +227,15 @@ public class SudoServiceTest {
 				SudoService.setCellValueAffectCandidates(6,2,8);
 				SudoService.setCellValueAffectCandidates(8,8,9);
 				assertEquals(72,(int)SudoService.countEmptyCellsIn9x9());
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countEmptyCellsIn9x9(resultList);
+				assertEquals(72, resultList.size());
+				assertFalse(resultList.contains(new RowCol(8,8)));
+				assertTrue(resultList.contains(new RowCol(8,7)));
 		}
 
 		@Test public void countEmptyCellsInRow() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(9,(int)SudoService.countEmptyCellsInRow(3));
 				SudoService.setCellValueAffectCandidates(8,0,1);
 				assertEquals(8,(int)SudoService.countEmptyCellsInRow(8));
@@ -217,10 +248,16 @@ public class SudoServiceTest {
 				SudoService.setCellValueAffectCandidates(8,7,8);
 				SudoService.setCellValueAffectCandidates(8,8,9);
 				assertEquals(0,(int)SudoService.countEmptyCellsInRow(8));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countEmptyCellsInRow(8,resultList);
+				assertEquals(0, resultList.size());
+				SudoService.setCellValueAffectCandidates(8,7,0);
+				SudoService.countEmptyCellsInRow(8,resultList);
+				assertTrue(resultList.contains(new RowCol(8,7)));
 		}
 
 		@Test public void countEmptyCellsInCol() {
-				SudoService.initializeSudo();
+				SudoService.initialize9x9();
 				assertEquals(9,(int)SudoService.countEmptyCellsInCol(0));
 				SudoService.setCellValueAffectCandidates(0,0,1);
 				assertEquals(8,(int)SudoService.countEmptyCellsInCol(0));
@@ -233,6 +270,12 @@ public class SudoServiceTest {
 				SudoService.setCellValueAffectCandidates(7,0,8);
 				SudoService.setCellValueAffectCandidates(8,0,9);
 				assertEquals(0,(int)SudoService.countEmptyCellsInCol(0));
+				List<RowCol> resultList = new ArrayList<>();
+				SudoService.countEmptyCellsInCol(0,resultList);
+				assertEquals(0, resultList.size());
+				SudoService.setCellValueAffectCandidates(8,0,0);
+				SudoService.countEmptyCellsInCol(0,resultList);
+				assertTrue(resultList.contains(new RowCol(8,0)));
 		}
 
 		@Test public void replaceCellCandidateValue() {
@@ -247,20 +290,22 @@ public class SudoServiceTest {
     		assertEquals(List.of(2,4,6),SudoService.getCellCandidatesValues(3,3));
     		assertEquals(2,(int) SudoService.getCellValue(8,1));
 
-    		SudoService.initializeSudo();
+    		SudoService.initialize9x9();
 				assertNotEquals(List.of(2,4,6),SudoService.getCellCandidatesValues(3,3));
 				assertNotEquals(2,(int) SudoService.getCellValue(8,1));
 		}
 
 		@Test public void removeCellCandidateValue() {
-    		SudoService.initializeSudo();
+    		SudoService.initialize9x9();
     		SudoService.replaceCellCandidateValues(8,8,List.of(1,2,3,4,5,6,7,8,9));
     		assertEquals(List.of(1,2,3,4,5,6,7,8,9),SudoService.getCellCandidatesValues(8,8));
     		SudoService.removeCellCandidateValue(8,8,1);
-    		assertNotEquals(List.of(1,2,3,4,5,6,7,8,9),SudoService.getCellCandidatesValues(8,8));
+				SudoService.replaceCellCandidateValues(8,8,List.of(2,3,4,5,6,7,8,9));
+				assertNotEquals(List.of(1,2,3,4,5,6,7,8,9),SudoService.getCellCandidatesValues(8,8));
     		assertEquals(List.of(2,3,4,5,6,7,8,9),SudoService.getCellCandidatesValues(8,8));
 		}
 
 		@Test public void addCellCandidateValue() {
+    		//ToDo
 		}
 }
