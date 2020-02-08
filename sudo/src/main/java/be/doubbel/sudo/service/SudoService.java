@@ -17,14 +17,22 @@ public class SudoService {
 		//dimension 3 : index 0 : candidates, value 1 = can1,value 2 = can2, value 3 = can1 + can2 , ...
 		//              index 1 : value
 		//              index 2 : original value , like when sudo is loaded, the value is not changeable
+
+
+		// when starting
+		// always first loadOriginalValues
+		// then		initialize9x9
+
 		public static Integer getCellValue(Integer row, Integer col) {
 				return sudoField[row][col][INDEX_VALUE];
 		}
 
 		static void setCellValueAffectCandidates(Integer row, Integer col, Integer value) {
-				sudoField[row][col][INDEX_VALUE] = value;
-				if (!cellIsEmpy(row, col)) {
-						removeAllCellCandidateValues(row, col);
+				if (getOriginalValueFromCell(row,col) == 0) {
+						sudoField[row][col][INDEX_VALUE] = value;
+						if (!cellIsEmpy(row, col)) {
+								removeAllCellCandidateValues(row, col);
+						}
 				}
 		}
 
@@ -109,11 +117,26 @@ public class SudoService {
 				return result;
 		}
 
+		static Integer getOriginalValueFromCell(Integer row,Integer col) {
+				return sudoField[row][col][INDEX_ORIGINAL_VALUE];
+		}
+
 		static void initialize9x9() {
 				for (Integer row = 0; row < 9; row++) {
 						for (Integer col = 0; col < 9; col++) {
-								setCellValueAffectCandidates(row, col, 0);
+								setCellValueAffectCandidates(row,col,getOriginalValueFromCell(row,col));
 								replaceCellCandidateValue(row, col, 0);
+						}
+				}
+		}
+
+		public static void loadOriginalValues(String recourceName) {
+				FileService fileService = new FileService();
+				Integer[][] resource = fileService.readSudo(recourceName);
+				for (Integer row = 0;row <9;row++) {
+						for (Integer col=0;col<9;col++) {
+								sudoField[row][col][INDEX_ORIGINAL_VALUE] = resource[row][col];
+								setCellValueAffectCandidates(row,col,resource[row][col]);
 						}
 				}
 		}

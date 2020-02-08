@@ -1,5 +1,6 @@
 package be.doubbel.sudo.gui;
 
+import be.doubbel.sudo.service.SudoService;
 import com.vaadin.flow.component.html.Label;
 
 public class Candidate extends Label {
