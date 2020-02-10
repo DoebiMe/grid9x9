@@ -6,6 +6,13 @@
 
 /* Example: CSS class name to center align the content . */
 
+.fileDropDown {
+  margin: 0;
+  padding: 0;
+  font-size: 4px;
+  height: 7px;
+}
+
 .candidate {
   margin: 0;
   padding: 0;

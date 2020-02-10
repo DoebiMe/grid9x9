@@ -13,18 +13,38 @@ import java.util.List;
 import java.util.Scanner;
 
 public class FileService {
-    public  List<String> getResourceFolderFiles () throws IOException {
+    private static FileService instance;
+
+    private FileService() {
+    }
+    public static FileService getInstance() {
+        // zie https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
+        if (instance == null) {
+            synchronized (FileService.class) {
+                if (instance == null) {
+                    instance = new FileService();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public  List<String> getResourceFolderFiles ()  {
         List<String> resultList = new ArrayList<>();
 
-        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-
-        Resource[] resources = resolver.getResources("META-INF/resources/sudos/*.txt");
-
-        for (Resource file : resources) {
-            resultList.add(file.getFilename());
-            System.out.println(file.getFilename());
+        try {
+            PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+            Resource[] resources = resolver.getResources("META-INF/resources/sudos/*.txt");
+            for (Resource file : resources) {
+                resultList.add(file.getFilename());
+                System.out.println(file.getFilename());
+            }
         }
-        return resultList;
+        catch (IOException exception) {
+        }
+        finally {
+            return resultList;
+        }
     }
 
 

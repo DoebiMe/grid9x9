@@ -124,15 +124,15 @@ public class SudoService {
         }
     }
 
-    Integer getCellCandidatesValue(Integer row, Integer col) {
+    public Integer getCellCandidatesValue(Integer row, Integer col) {
         return sudoField[row][col][INDEX_CANDIDATES];
     }
 
-    List<Integer> getCellCandidatesValues(Integer row, Integer col) {
+    public List<Integer> getCellCandidatesValues(Integer row, Integer col) {
         return getSetBits(getCellCandidatesValue(row, col));
     }
 
-    List<Integer> getSetBits(Integer value) {
+    public List<Integer> getSetBits(Integer value) {
         List<Integer> result = new ArrayList<>();
         for (Integer lus = 0; lus < 10; lus++) {
             Integer bitValue = 1 << lus;
@@ -143,7 +143,7 @@ public class SudoService {
         return result;
     }
 
-    Integer getOriginalValueFromCell(Integer row, Integer col) {
+    public Integer getOriginalValueFromCell(Integer row, Integer col) {
         return sudoField[row][col][INDEX_ORIGINAL_VALUE];
     }
 
@@ -157,7 +157,7 @@ public class SudoService {
     }
 
     public void loadOriginalValues(String recourceName) {
-        FileService fileService = new FileService();
+        FileService fileService = FileService.getInstance();
         Integer[][] resource = fileService.readSudo(recourceName);
         for (Integer row = 0; row < 9; row++) {
             for (Integer col = 0; col < 9; col++) {

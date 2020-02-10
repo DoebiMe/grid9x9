@@ -1,5 +1,6 @@
 package be.doubbel.sudo.gui;
 
+import be.doubbel.sudo.service.FileService;
 import be.doubbel.sudo.service.GreetService;
 import be.doubbel.sudo.service.SudoService;
 import com.vaadin.flow.component.button.Button;
@@ -11,6 +12,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
 
 /**
  * A sample Vaadin view class.
@@ -26,63 +29,58 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Route
 
-@PWA(name = "Doubbel Sudo",
-        shortName = "Doebi Sudo",
-        description = "This is the Doubbel Sudo application.",
-        enableInstallPrompt = true)
+@PWA(name = "Doubbel Sudo", shortName = "Doebi Sudo", description = "This is the Doubbel Sudo application.", enableInstallPrompt = true)
 
 @CssImport("./styles/shared-styles.css")
 //@CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 public class MainView extends VerticalLayout {
 
-    /**
-     * Construct a new Vaadin view.
-     * <p>
-     * Build the initial UI state for the user accessing the application.
-     *
-     * @param service The message service. Automatically injected Spring managed bean.
-     */
-    public Grid9x9 grid9x9;
-    public ComboBox<String> fileListBox;
-    public MainView(@Autowired GreetService service) {
-        addClassName("mainForm");
-        grid9x9 = new Grid9x9();
-        fileListBox = new ComboBox<>();
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.add(grid9x9,createLoadButton());
-        horizontalLayout.add(verticalLayout,createFileDropDown());
-        add(horizontalLayout);
+		/**
+		 * Construct a new Vaadin view.
+		 * <p>
+		 * Build the initial UI state for the user accessing the application.
+		 *
+		 * @param service The message service. Automatically injected Spring managed bean.
+		 */
+		public Grid9x9 grid9x9 = new Grid9x9();
+		public ComboBox<String> fileListBox = new ComboBox<>();
+		public String currentResourceName = "s01a.txt";
 
-    }
-    public ComboBox<String> createFileDropDown() {
-        fileListBox.setItems("Option one", "Option two");
-        fileListBox.setLabel("Label");
+		public MainView()  {
+				addClassName("mainForm");
+				HorizontalLayout horizontalLayout = new HorizontalLayout();
+				VerticalLayout verticalLayout = new VerticalLayout();
+				verticalLayout.add(grid9x9, createLoadButton());
+				horizontalLayout.add(verticalLayout, createFileDropDown());
+				add(horizontalLayout);
+		}
 
-        ComboBox<String> placeHolderComboBox = new ComboBox<>();
-        placeHolderComboBox.setItems("Option one", "Option two");
-        placeHolderComboBox.setPlaceholder("Placeholder");
-
-        ComboBox<String> valueComboBox = new ComboBox<>();
-        valueComboBox.setItems("Value", "Option one", "Option two");
-        valueComboBox.setValue("Value");
-        return fileListBox;
-    }
-    public void refreshGrid9x9() {
-        grid9x9.update9x9();
-        System.out.println("Do refresh");
-        Notification.show("Do refresh");
-    }
-
-    public Button createLoadButton() {
-        Button loadSudoButton = new Button("Load Sudo");
-        loadSudoButton.addClickListener(buttonClickEvent -> {
+		public ComboBox<String> createFileDropDown() {
+		    fileListBox.addClassName("fileDropDown");
+				FileService fileService = FileService.getInstance();
+				fileListBox.setLabel("Select resource");
+				fileListBox.setItems(fileService.getResourceFolderFiles());
+        fileListBox.addValueChangeListener(recourse -> {
+            currentResourceName = fileListBox.getValue();
             SudoService sudoService = SudoService.getInstance();
-            sudoService.loadOriginalValues("s01a.txt");
+            sudoService.loadOriginalValues(currentResourceName);
             refreshGrid9x9();
         });
-        loadSudoButton.setHeight("5px");
-        return loadSudoButton;
-    }
+				return fileListBox;
+		}
 
+		public void refreshGrid9x9() {
+				grid9x9.update9x9();
+		}
+
+		public Button createLoadButton() {
+				Button loadSudoButton = new Button("Load Sudo");
+				loadSudoButton.addClickListener(buttonClickEvent -> {
+						SudoService sudoService = SudoService.getInstance();
+						sudoService.loadOriginalValues(currentResourceName);
+						refreshGrid9x9();
+				});
+				loadSudoButton.setHeight("5px");
+				return loadSudoButton;
+		}
 }
