@@ -10,7 +10,8 @@ public class ButtonGridCell extends FlexLayout {
         NativeButton button = new NativeButton("5");
         button.addClassName("buttonGridCell");
         addClassName("buttonGridCell");
-        Integer value = SudoService.getCellValue(row-1, col-1);
+        SudoService sudoService = SudoService.getInstance();
+        Integer value = sudoService.getCellValue(row-1, col-1);
         if (value==null) value = 0;
         button.setText(value.toString());
         add(button);

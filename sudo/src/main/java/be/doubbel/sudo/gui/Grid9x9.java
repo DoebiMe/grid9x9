@@ -5,6 +5,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 public class Grid9x9 extends VerticalLayout {
     public Grid9x9() {
+
+    }
+    public void update9x9(){
         removeAll();
         addClassName("gird9x9");
         for (int row = 1;row < 10;row++) {
