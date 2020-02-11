@@ -15,6 +15,19 @@ public class ButtonGridCell extends FlexLayout {
         NativeButton button = new NativeButton("5");
         button.addClassName("buttonGridCell");
         addClassName("buttonGridCell");
+
+        if (buttonCol.equals(SudoService.getInstance().getUserSelectedCol()) &&
+            buttonRow.equals(SudoService.getInstance().getUserSelectedRow())) {
+            addClassName("selectedCell");
+            button.addClassName("selectedCell");
+            System.out.println("In de sudoservice row = " + SudoService.getInstance().getOldUserSelectedRow());
+        }
+        else
+        {
+            addClassName("notSelectedCell");
+            button.addClassName("notSelectedCell");
+        }
+
         SudoService sudoService = SudoService.getInstance();
         Integer value = sudoService.getCellValue(row-1, col-1);
         if (value==null) value = 0;
@@ -23,6 +36,7 @@ public class ButtonGridCell extends FlexLayout {
         add(button);
     }
     public void buttonClicked() {
-        Notification.show("Clicked on row " + buttonRow + " col "+ buttonCol);
+        SudoService.getInstance().setUserSelectedRowAndCol(buttonRow,buttonCol);
+        Grid9x9.getInstance().update9x9();
     }
 }

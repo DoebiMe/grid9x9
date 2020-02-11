@@ -37,7 +37,6 @@ public class FileService {
             Resource[] resources = resolver.getResources("META-INF/resources/sudos/*.txt");
             for (Resource file : resources) {
                 resultList.add(file.getFilename());
-                System.out.println(file.getFilename());
             }
         }
         catch (IOException exception) {
@@ -65,9 +64,9 @@ public class FileService {
                 stringBuffer.concat(stringFromFile);
                 for (Integer col=0;col<9;col++) {
                     result[row][col] = Character.getNumericValue(stringFromFile.charAt(col));
-                    System.out.print(result[row][col]);
+                    //System.out.print(result[row][col]);
                 }
-                System.out.println();
+                //System.out.println();
                 row++;
             }
             stringBuffer.replaceAll(" ","");

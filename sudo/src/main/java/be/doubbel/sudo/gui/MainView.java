@@ -42,7 +42,6 @@ public class MainView extends VerticalLayout {
 		 *
 		 * @param service The message service. Automatically injected Spring managed bean.
 		 */
-		public Grid9x9 grid9x9 = new Grid9x9();
 		public ComboBox<String> fileListBox = new ComboBox<>();
 		public String currentResourceName = "s01a.txt";
 
@@ -50,7 +49,8 @@ public class MainView extends VerticalLayout {
 				addClassName("mainForm");
 				HorizontalLayout horizontalLayout = new HorizontalLayout();
 				VerticalLayout verticalLayout = new VerticalLayout();
-				verticalLayout.add(grid9x9, createLoadButton());
+				SelectionBar selectionBar = new SelectionBar();
+				verticalLayout.add(Grid9x9.getInstance(), selectionBar);
 				horizontalLayout.add(verticalLayout, createFileDropDown());
 				add(horizontalLayout);
 		}
@@ -64,23 +64,8 @@ public class MainView extends VerticalLayout {
             currentResourceName = fileListBox.getValue();
             SudoService sudoService = SudoService.getInstance();
             sudoService.loadOriginalValues(currentResourceName);
-            refreshGrid9x9();
+            Grid9x9.getInstance().update9x9();// refreshGrid9x9();
         });
 				return fileListBox;
-		}
-
-		public void refreshGrid9x9() {
-				grid9x9.update9x9();
-		}
-
-		public Button createLoadButton() {
-				Button loadSudoButton = new Button("Load Sudo");
-				loadSudoButton.addClickListener(buttonClickEvent -> {
-						SudoService sudoService = SudoService.getInstance();
-						sudoService.loadOriginalValues(currentResourceName);
-						refreshGrid9x9();
-				});
-				loadSudoButton.setHeight("5px");
-				return loadSudoButton;
 		}
 }
