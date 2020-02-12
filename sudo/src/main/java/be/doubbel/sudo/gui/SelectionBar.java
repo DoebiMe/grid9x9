@@ -9,24 +9,33 @@ class SelectionBar extends VerticalLayout {
 
 		HorizontalLayout topOfSelectionBar = new HorizontalLayout();
 		HorizontalLayout bottomOfSelectionBar = new HorizontalLayout();
+		SudoService sudoService;
+		Grid9x9 grid9x9;
 
 		public SelectionBar() {
+				sudoService = SudoService.getInstance();
+				grid9x9 = Grid9x9.getInstance();
 				addClassName("selectionBar");
 				for (int loop = 0; loop < 9; loop++) {
 						NativeButton button = new NativeButton(Integer.toString(loop + 1));
 						button.addClassName("selectionBarNumber");
 						topOfSelectionBar.add(button);
-						int value = loop +1;
+						int value = loop + 1;
 						button.addClickListener(event -> {
-								SudoService.getInstance()
-										.setUserSelectedCellValueAffectCanditates(value);
-
-								Grid9x9.getInstance().update9x9();
+								sudoService.setUserSelectedCellValueAffectCanditates(value);
+								grid9x9.update9x9();
 						});
 				}
 				NativeButton buttonErase = new NativeButton("Erase");
 				NativeButton buttonReset = new NativeButton("Reset");
 				NativeButton buttonSolve = new NativeButton("Solve");
+
+				buttonReset.addClickListener(event -> {
+						sudoService.resetToOriginalValues();
+						sudoService.setAllCandidatesInCellWithoutValue();
+						grid9x9.update9x9();
+				});
+
 				buttonErase.addClassName("selectionBarButton");
 				buttonReset.addClassName("selectionBarButton");
 				buttonSolve.addClassName("selectionBarButton");

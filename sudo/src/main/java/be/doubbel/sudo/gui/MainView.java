@@ -45,7 +45,7 @@ public class MainView extends VerticalLayout {
 		public ComboBox<String> fileListBox = new ComboBox<>();
 		public String currentResourceName = "s01a.txt";
 
-		public MainView()  {
+		public MainView() {
 				addClassName("mainForm");
 				HorizontalLayout horizontalLayout = new HorizontalLayout();
 				VerticalLayout verticalLayout = new VerticalLayout();
@@ -56,16 +56,17 @@ public class MainView extends VerticalLayout {
 		}
 
 		public ComboBox<String> createFileDropDown() {
-		    fileListBox.addClassName("fileDropDown");
+				fileListBox.addClassName("fileDropDown");
 				FileService fileService = FileService.getInstance();
 				fileListBox.setLabel("Select resource");
 				fileListBox.setItems(fileService.getResourceFolderFiles());
-        fileListBox.addValueChangeListener(recourse -> {
-            currentResourceName = fileListBox.getValue();
-            SudoService sudoService = SudoService.getInstance();
-            sudoService.loadOriginalValues(currentResourceName);
-            Grid9x9.getInstance().update9x9();// refreshGrid9x9();
-        });
+				fileListBox.addValueChangeListener(recourse -> {
+						currentResourceName = fileListBox.getValue();
+						SudoService sudoService = SudoService.getInstance();
+						sudoService.loadOriginalValues(currentResourceName);
+						sudoService.setAllCandidatesInCellWithoutValue();
+						Grid9x9.getInstance().update9x9();// refreshGrid9x9();
+				});
 				return fileListBox;
 		}
 }

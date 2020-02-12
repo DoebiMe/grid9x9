@@ -28,15 +28,15 @@ public class SudoService {
 		private Integer oldUserSelectedRow = 0;
 		private Integer oldUserSelectedCol = 0;
 
-    public Integer getOldUserSelectedRow() {
-        return oldUserSelectedRow;
-    }
+		public Integer getOldUserSelectedRow() {
+				return oldUserSelectedRow;
+		}
 
-    public Integer getOldUserSelectedCol() {
-        return oldUserSelectedCol;
-    }
+		public Integer getOldUserSelectedCol() {
+				return oldUserSelectedCol;
+		}
 
-    public Integer getUserSelectedRow() {
+		public Integer getUserSelectedRow() {
 				return userSelectedRow;
 		}
 
@@ -82,8 +82,10 @@ public class SudoService {
 		}
 
 		public void setUserSelectedCellValueAffectCanditates(Integer value) {
-    		setCellValueAffectCandidates(getUserSelectedRow(),getUserSelectedCol(),value);
-
+				setCellValueAffectCandidates(getUserSelectedRow() - 1, getUserSelectedCol() - 1, value);
+				System.out.println("Set value ");
+				System.out.println("row = " + (getUserSelectedRow() - 1));
+				System.out.println("col = " + (getUserSelectedCol() - 1));
 		}
 
 		public void setCellValueAffectCandidates(Integer row, Integer col, Integer value) {
@@ -94,6 +96,8 @@ public class SudoService {
 						if (!cellIsEmpy(row, col)) {
 								removeAllCellCandidateValues(row, col);
 						}
+				} else {
+						System.out.println("Original value can not be overwritten");
 				}
 		}
 
@@ -198,6 +202,25 @@ public class SudoService {
 						for (Integer col = 0; col < 9; col++) {
 								sudoField[row][col][INDEX_ORIGINAL_VALUE] = resource[row][col];
 								setCellValueAffectCandidates(row, col, resource[row][col]);
+						}
+				}
+		}
+
+		public void resetToOriginalValues() {
+				for (Integer row = 0; row<9;row++) {
+						for (Integer col=0;col<9;col++) {
+								setCellValueAffectCandidates(row,col,getOriginalValueFromCell(row,col));
+						}
+				}
+		}
+
+		public void setAllCandidatesInCellWithoutValue() {
+				List<Integer> allCandidates = List.of(1,2,3,4,5,6,7,8,9);
+				for (Integer row = 0; row<9;row++) {
+						for (Integer col=0;col<9;col++) {
+								if (cellIsEmpy(row,col)) {
+										replaceCellCandidateValues(row,col,allCandidates);
+								}
 						}
 				}
 		}
